@@ -20,8 +20,6 @@ body {
     align-items: center;
     margin-top: 50px;
 }
-
-/* Search Box Styles */
 .search-container {
     display: flex;
     gap: 10px;

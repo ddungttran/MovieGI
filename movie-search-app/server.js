@@ -1,56 +1,55 @@
-// Load environment variables from a .env file
 require('dotenv').config();
 
-// Import necessary libraries
+// First, I import the libraries I need: Express to set up the server, Axios to handle API requests, 
+// and Path to manage file paths.
 const express = require('express'); 
 const axios = require('axios'); 
 const path = require('path'); 
 
-// Create an Express app
+// I set up an Express application and decide that it will run on port 3000.
 const app = express();
-const PORT = 3000; // The port where the server will run on 3000
+const PORT = 3000; 
 
-// Serve static files from the "public" folder 
+// I make sure that any static files (like HTML, CSS, or JavaScript) from the "public" folder can be served.
 app.use(express.static(path.join(__dirname, 'public')));
 
-//API key and base URL
-const TMDB_API_KEY = process.env.TMDB_API_KEY; // API key I stored in the .env file
-const TMDB_BASE_URL = 'https://api.themoviedb.org/3'; // Base URL for TMDB API
+// Next, I grab my TMDB API key from the environment variables and define the base URL for the API.
+const TMDB_API_KEY = process.env.TMDB_API_KEY;
+const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 
-// Route to search for movies by name
+// Here, I create a route that searches for movies. When someone makes a request with a query,
+// I use the TMDB API to find movies that match the query and send the results back.
 app.get('/api/search', async (req, res) => {
-    const query = req.query.q; // Get the "q" parameter from the URL (movie name)
+    const query = req.query.q;
     try {
-        // Make a GET request to the TMDB API to search for movies
         const response = await axios.get(`${TMDB_BASE_URL}/search/movie`, {
-            params: { api_key: TMDB_API_KEY, query }, // Send the API key and search query as parameters
+            params: { api_key: TMDB_API_KEY, query },
         });
-        res.json(response.data.results); // Send the list of movies back to the client
+        res.json(response.data.results);
     } catch (error) {
-        // If there's an error, send a 500 status with the error message
         res.status(500).json({ error: error.message });
     }
 });
 
-// Route to get details for a specific movie by its ID
+// This route gets the details of a specific movie using its ID. I also include recommendations for similar movies.
+// I send the movie details back so they can be displayed.
 app.get('/api/movie/:id', async (req, res) => {
-    const movieId = req.params.id; // Get the movie ID from the URL
+    const movieId = req.params.id;
     try {
-        // Make a GET request to the TMDB API to get movie details
         const response = await axios.get(`${TMDB_BASE_URL}/movie/${movieId}`, {
             params: { 
                 api_key: TMDB_API_KEY, 
-                append_to_response: 'recommendations', // Include recommendations in the response
+                append_to_response: 'recommendations',
             },
         });
-        res.json(response.data); // Send the movie details back to the client
+        res.json(response.data);
     } catch (error) {
-        // If there's an error, send a 500 status with the error message
         res.status(500).json({ error: error.message });
     }
 });
 
-// Start the server and listen on the specified port
+// Finally, I start the server and make sure it listens on the port I defined earlier. 
+// I also log the server URL so I know where to access it.
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`); // Log the server URL
+    console.log(`Server is running on http://localhost:${PORT}`);
 });
