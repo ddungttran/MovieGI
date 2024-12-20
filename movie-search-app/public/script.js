@@ -1,11 +1,11 @@
-// I start by getting references to the input box where users type the movie name, 
-// the button they click to search, and the section where I will display the search results.
+// References are obtained for the input box where users type the movie name, 
+// the button they click to search, and the section where the search results will be displayed.
 const searchInput = document.getElementById('searchInput');
 const searchButton = document.getElementById('searchButton');
 const resultsSection = document.getElementById('movie-results');
 
-// Here, I listen for a click event on the search button. When it’s clicked,
-// I take the value entered in the input box, trim any extra spaces, and call the function to search for movies.
+// A click event is added to the search button. When clicked, the value entered in the input box is trimmed, 
+// and the function to search for movies is called.
 searchButton.addEventListener('click', () => {
     const query = searchInput.value.trim();
     if (query) {
@@ -13,8 +13,8 @@ searchButton.addEventListener('click', () => {
     }
 });
 
-// I also listen for the "Enter" key being pressed while the user is typing in the input box.
-// This way, users can start a search without needing to click the button.
+// A keyup event is added to detect when the "Enter" key is pressed while typing in the input box.
+// This allows users to start a search without clicking the button.
 searchInput.addEventListener('keyup', (e) => {
     if (e.key === 'Enter') {
         const query = searchInput.value.trim();
@@ -24,8 +24,8 @@ searchInput.addEventListener('keyup', (e) => {
     }
 });
 
-// This is the function where I handle the actual search. I send a request to my server with the movie name,
-// then get back a list of results. If something goes wrong, I show an error message on the page.
+// Handles the actual search. Sends a request to the server with the movie name and retrieves a list of results.
+// If an error occurs, an error message is displayed on the page.
 async function searchMovies(query) {
     try {
         const response = await fetch(`/api/search?q=${query}`);
@@ -36,8 +36,8 @@ async function searchMovies(query) {
     }
 }
 
-// In this function I take the list of movies from the search and display them in the results section.
-// If there are no movies, I show a message saying nothing was found.
+// Takes the list of movies from the search and displays them in the results section.
+// If no movies are found, a message is displayed.
 function displayMovies(movies) {
     resultsSection.innerHTML = '';
 
@@ -46,8 +46,8 @@ function displayMovies(movies) {
         return; 
     }
 
-    // For each movie in the list, I create a new box, add the title and release year, and make it clickable.
-    // When clicked, it will call another function to show the details of that movie.
+    // For each movie in the list, a new box is created, the title and release year are added, and it is made clickable.
+    // Clicking on a movie calls another function to show the details of that movie.
     movies.forEach((movie) => {
         const resultItem = document.createElement('div');
         resultItem.textContent = `${movie.title} (${movie.release_date ? movie.release_date.split('-')[0] : 'N/A'})`;
@@ -56,8 +56,8 @@ function displayMovies(movies) {
     });
 }
 
-// When a user clicks on a movie, I fetch more details about that specific movie from the server.
-// Then, I display those details in a simple popup.
+// Fetches more details about a specific movie from the server when a movie is clicked.
+// The details are displayed in a simple popup.
 async function showMovieDetails(movieId) {
     try {
         const response = await fetch(`/api/movie/${movieId}`);

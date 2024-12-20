@@ -1,24 +1,24 @@
 require('dotenv').config();
 
-// First, I import the libraries I need: Express to set up the server, Axios to handle API requests, 
-// and Path to manage file paths.
+// Importing the necessary libraries: Express for the server, Axios for API requests, 
+// and Path for managing file paths.
 const express = require('express'); 
 const axios = require('axios'); 
 const path = require('path'); 
 
-// I set up an Express application and decide that it will run on port 3000.
+// Setting up the Express application and defining the port.
 const app = express();
 const PORT = 3000; 
 
-// I make sure that any static files (like HTML, CSS, or JavaScript) from the "public" folder can be served.
+// Configuring the application to serve static files from the "public" folder.
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Next, I grab my TMDB API key from the environment variables and define the base URL for the API.
+// Loading the TMDB API key from the environment variables and defining the base URL for the API.
 const TMDB_API_KEY = process.env.TMDB_API_KEY;
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 
-// Here, I create a route that searches for movies. When someone makes a request with a query,
-// I use the TMDB API to find movies that match the query and send the results back.
+// Defining a route to search for movies. When a request with a query is made,
+// the TMDB API is used to find matching movies, and the results are sent back.
 app.get('/api/search', async (req, res) => {
     const query = req.query.q;
     try {
@@ -31,8 +31,8 @@ app.get('/api/search', async (req, res) => {
     }
 });
 
-// This route gets the details of a specific movie using its ID. I also include recommendations for similar movies.
-// I send the movie details back so they can be displayed.
+// Defining a route to get the details of a specific movie using its ID, along with recommendations for similar movies.
+// The movie details are sent back to be displayed.
 app.get('/api/movie/:id', async (req, res) => {
     const movieId = req.params.id;
     try {
@@ -48,8 +48,7 @@ app.get('/api/movie/:id', async (req, res) => {
     }
 });
 
-// Finally, I start the server and make sure it listens on the port I defined earlier. 
-// I also log the server URL so I know where to access it.
+// Starting the server and logging the server URL for access.
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
